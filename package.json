@@ -1,0 +1,21 @@
+{
+  "name": "turfzone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:backend": "npm run dev -w backend",
+    "dev:web": "npm run dev -w web",
+    "dev:mobile": "npm run start -w mobile",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": "true",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

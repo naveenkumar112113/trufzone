@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const turfController_1 = require("../controllers/turfController");
+const router = (0, express_1.Router)();
+router.get('/', turfController_1.getTurfs);
+router.get('/sports/all', turfController_1.getAllSports);
+router.get('/:id', turfController_1.getTurfDetails);
+router.get('/:id/slots', turfController_1.getTurfSlots);
+exports.default = router;
