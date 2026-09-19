@@ -70,7 +70,6 @@ const corsOptions: CorsOptions = {
 
 // Enable CORS with preflight handling for all routes
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // Prevent browser and proxy caching of sensitive API responses (bfcache / back button security)

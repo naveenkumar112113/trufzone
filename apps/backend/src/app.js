@@ -44,7 +44,6 @@ const corsOptions = {
 };
 
 app.use((0, cors_1.default)(corsOptions));
-app.options('*', (0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 // Prevent browser and proxy caching of sensitive API responses (bfcache / back button security)
 app.use((req, res, next) => {
