@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { ITurf, ITurfSlot, IBooking } from '@turfhub/shared-types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const cleanApiUrl = rawApiUrl.trim().replace(/\/+$/, '');
+const API_URL = cleanApiUrl.endsWith('/api') ? cleanApiUrl : `${cleanApiUrl}/api`;
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -107,7 +109,7 @@ export const publicBookTurf = (data: {
     data?: any;
   }>('/bookings/public', data);
 
-export const getOwnerBookings = (params?: { status?: string; turfId?: string; search?: string }) => 
+export const getOwnerBookings = (params?: { status?: string; turfId?: string; search?: string }) =>
   api.get<{ success: boolean; data: any[] }>('/owner/bookings', { params });
 
 export const createOfflineBooking = (data: {
@@ -122,7 +124,7 @@ export const createOfflineBooking = (data: {
   notes?: string;
 }) => api.post<{ success: boolean; message: string; data: any }>('/owner/bookings/offline', data);
 
-export const updateBookingStatus = (id: string, data: { status?: string; paymentStatus?: string }) => 
+export const updateBookingStatus = (id: string, data: { status?: string; paymentStatus?: string }) =>
   api.put<{ success: boolean; message: string; data: any }>(`/owner/bookings/${id}/status`, data);
 
 // --- Public Turf Discovery ---
@@ -136,9 +138,9 @@ export const getPublicTurfSlots = (id: string, date: string) =>
   api.get<{ success: boolean; data: any[] }>(`/turfs/${id}/slots`, { params: { date } });
 
 // --- Owner Dashboard & Stats ---
-export const getDashboardStats = () => api.get<{ 
-  success: boolean; 
-  data: { 
+export const getDashboardStats = () => api.get<{
+  success: boolean;
+  data: {
     totalTurfs: number;
     activeBookings: number;
     totalBookings: number;
@@ -162,41 +164,41 @@ export const getDashboardStats = () => api.get<{
       paymentStatus: string;
       status: string;
     }>;
-  } 
+  }
 }>('/owner/dashboard');
 
 // --- Turfs ---
-export const getOwnerTurfs = (params?: { sport?: string }) => 
+export const getOwnerTurfs = (params?: { sport?: string }) =>
   api.get<{ success: boolean; data: any[] }>('/owner/turfs', { params });
-export const getAllSports = () => 
+export const getAllSports = () =>
   api.get<{ success: boolean; data: string[] }>('/turfs/sports/all');
 export const createTurf = (data: Partial<ITurf>) => api.post<{ success: boolean; data: ITurf }>('/owner/turfs', data);
 export const generateSlots = (data: any) => api.post<{ success: boolean; data: ITurfSlot[] }>('/owner/slots', data);
-export const blockSlot = (data: { turfId: string; date?: string; timeSlot?: string; reason?: string }) => 
+export const blockSlot = (data: { turfId: string; date?: string; timeSlot?: string; reason?: string }) =>
   api.post<{ success: boolean; message: string; data: any }>('/owner/slots/block', data);
 
 // --- Customers CRM ---
 export const getOwnerCustomers = () => api.get<{ success: boolean; data: any[] }>('/owner/customers');
 
 // --- Dynamic Random Data Seeder ---
-export const seedRandomMatches = (count: number = 5) => 
+export const seedRandomMatches = (count: number = 5) =>
   api.post<{ success: boolean; message: string; count: number; data: any[] }>('/owner/seed-random', { count });
 
 // --- Reviews ---
 export const getOwnerReviews = () => api.get<{ success: boolean; data: any[] }>('/owner/reviews');
-export const addReviewReply = (id: string, text: string) => 
+export const addReviewReply = (id: string, text: string) =>
   api.post<{ success: boolean; data: any; message: string }>(`/owner/reviews/${id}/reply`, { text });
 
 // --- Offers ---
 export const getOwnerOffers = () => api.get<{ success: boolean; data: any[] }>('/owner/offers');
-export const createOwnerOffer = (data: any) => 
+export const createOwnerOffer = (data: any) =>
   api.post<{ success: boolean; data: any; message: string }>('/owner/offers', data);
 export const deleteOwnerOffer = (id: string) =>
   api.delete<{ success: boolean; message: string }>(`/owner/offers/${id}`);
 
 // --- Tournaments ---
 export const getOwnerTournaments = () => api.get<{ success: boolean; data: any[] }>('/owner/tournaments');
-export const createOwnerTournament = (data: any) => 
+export const createOwnerTournament = (data: any) =>
   api.post<{ success: boolean; data: any; message: string }>('/owner/tournaments', data);
 export const registerTournamentTeam = (tournamentId: string, data: {
   teamName: string;
@@ -208,14 +210,14 @@ export const updateTournamentTeamStatus = (tournamentId: string, teamId: string,
   api.patch<{ success: boolean; message: string; data: any }>(`/owner/tournaments/${tournamentId}/teams/${teamId}`, { status });
 
 // --- Reports ---
-export const getOwnerReports = () => api.get<{ 
-  success: boolean; 
+export const getOwnerReports = () => api.get<{
+  success: boolean;
   data: {
     totalRevenue: number;
     totalBookings: number;
     turfContributions: Array<{ name: string; revenue: number; bookings: number }>;
     sportDistribution: Array<{ name: string; value: number }>;
-  } 
+  }
 }>('/owner/reports');
 
 // --- Staff ---
